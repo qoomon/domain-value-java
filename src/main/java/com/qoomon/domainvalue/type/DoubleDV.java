@@ -13,7 +13,7 @@ public abstract class DoubleDV extends ComparableSingleFieldDV<Double> {
     }
 
     /**
-     * @param value
+     * @param value to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final Double value) {
@@ -21,7 +21,7 @@ public abstract class DoubleDV extends ComparableSingleFieldDV<Double> {
     }
 
     /**
-     * @param stringValue
+     * @param stringValue to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final String stringValue) {

@@ -13,7 +13,7 @@ public abstract class ShortDV extends ComparableSingleFieldDV<Short> {
     }
 
     /**
-     * @param value
+     * @param value to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final Short value) {
@@ -21,7 +21,7 @@ public abstract class ShortDV extends ComparableSingleFieldDV<Short> {
     }
 
     /**
-     * @param stringValue
+     * @param stringValue to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final String stringValue) {

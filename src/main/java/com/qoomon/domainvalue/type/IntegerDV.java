@@ -13,7 +13,7 @@ public abstract class IntegerDV extends ComparableSingleFieldDV<Integer> {
     }
 
     /**
-     * @param value
+     * @param value to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final Integer value) {
@@ -21,7 +21,7 @@ public abstract class IntegerDV extends ComparableSingleFieldDV<Integer> {
     }
 
     /**
-     * @param stringValue
+     * @param stringValue to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final String stringValue) {

@@ -15,7 +15,7 @@ public abstract class BigDecimalDV extends ComparableSingleFieldDV<BigDecimal> {
     }
 
     /**
-     * @param value
+     * @param value to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final BigDecimal value) {
@@ -23,13 +23,13 @@ public abstract class BigDecimalDV extends ComparableSingleFieldDV<BigDecimal> {
     }
 
     /**
-     * @param stringValue
+     * @param stringValue to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final String stringValue) {
         try {
             BigDecimal value = new BigDecimal(stringValue);
-            return isValid(new BigDecimal(stringValue));
+            return isValid(value);
         } catch (Exception exception) {
             return false;
         }

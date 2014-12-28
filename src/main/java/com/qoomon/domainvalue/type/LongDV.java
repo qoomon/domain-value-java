@@ -13,7 +13,7 @@ public abstract class LongDV extends ComparableSingleFieldDV<Long> {
     }
 
     /**
-     * @param value
+     * @param value to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final Long value) {
@@ -21,7 +21,7 @@ public abstract class LongDV extends ComparableSingleFieldDV<Long> {
     }
 
     /**
-     * @param stringValue
+     * @param stringValue to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final String stringValue) {

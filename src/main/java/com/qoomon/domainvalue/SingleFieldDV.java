@@ -1,9 +1,8 @@
 package com.qoomon.domainvalue;
 
 /**
- * @author Bengt Brodersen
- *
  * @param <T> type of the wrapped value
+ * @author Bengt Brodersen
  */
 public abstract class SingleFieldDV<T> implements DV {
 
@@ -20,17 +19,17 @@ public abstract class SingleFieldDV<T> implements DV {
     }
 
     /**
-     * @return the type of the wrapped value
-     */
-    public abstract Class<T> type();
-
-    /**
-     * @param value
+     * @param value to wrap
      * @return true if value is not null, false else
      */
     public static boolean isValid(Object value) {
         return value != null;
     }
+
+    /**
+     * @return the type of the wrapped value
+     */
+    public abstract Class<T> type();
 
     /**
      * @return the wrapped value
@@ -43,8 +42,7 @@ public abstract class SingleFieldDV<T> implements DV {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-                + ((this.value == null) ? 0 : this.value.hashCode());
+        result = prime * result + this.value.hashCode();
         return result;
     }
 
@@ -60,20 +58,12 @@ public abstract class SingleFieldDV<T> implements DV {
             return false;
         }
         final SingleFieldDV<?> other = (SingleFieldDV<?>) obj;
-        if (this.value == null) {
-            if (other.value != null) {
-                return false;
-            }
-        } else if (!this.value.equals(other.value)) {
-            return false;
-        }
-        return true;
+        return this.value.equals(other.value);
     }
 
     @Override
     public String toString() {
-        return new StringBuilder().append(getClass().getSimpleName())
-                .append(" [ ").append(this.value).append(" ]").toString();
+        return getClass().getSimpleName() + " [ " + this.value + " ]";
     }
 
 }

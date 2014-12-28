@@ -9,7 +9,7 @@ public abstract class BinaryDV extends SingleFieldDV<byte[]> {
     }
 
     /**
-     * @param value
+     * @param value to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final byte[] value) {

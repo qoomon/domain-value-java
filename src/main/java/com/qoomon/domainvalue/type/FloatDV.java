@@ -13,7 +13,7 @@ public abstract class FloatDV extends ComparableSingleFieldDV<Float> {
     }
 
     /**
-     * @param value
+     * @param value to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final Float value) {
@@ -21,7 +21,7 @@ public abstract class FloatDV extends ComparableSingleFieldDV<Float> {
     }
 
     /**
-     * @param stringValue
+     * @param stringValue to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final String stringValue) {

@@ -13,7 +13,7 @@ public abstract class CharacterDV extends ComparableSingleFieldDV<Character> {
     }
 
     /**
-     * @param value
+     * @param value to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final Character value) {
@@ -21,7 +21,7 @@ public abstract class CharacterDV extends ComparableSingleFieldDV<Character> {
     }
 
     /**
-     * @param stringValue
+     * @param stringValue to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final String stringValue) {

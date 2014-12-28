@@ -15,7 +15,7 @@ public abstract class BigIntegerDV extends ComparableSingleFieldDV<BigInteger> {
     }
 
     /**
-     * @param value
+     * @param value to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final BigInteger value) {
@@ -23,13 +23,13 @@ public abstract class BigIntegerDV extends ComparableSingleFieldDV<BigInteger> {
     }
 
     /**
-     * @param stringValue
+     * @param stringValue to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final String stringValue) {
         try {
             BigInteger value = new BigInteger(stringValue);
-            return isValid(new BigInteger(stringValue));
+            return isValid(value);
         } catch (Exception exception) {
             return false;
         }

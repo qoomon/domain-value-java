@@ -13,7 +13,7 @@ public abstract class ByteDV extends ComparableSingleFieldDV<Byte> {
     }
 
     /**
-     * @param value
+     * @param value to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final Byte value) {
@@ -21,7 +21,7 @@ public abstract class ByteDV extends ComparableSingleFieldDV<Byte> {
     }
 
     /**
-     * @param stringValue
+     * @param stringValue to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final String stringValue) {

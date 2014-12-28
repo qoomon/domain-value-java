@@ -13,7 +13,7 @@ public abstract class BooleanDV extends ComparableSingleFieldDV<Boolean> {
     }
 
     /**
-     * @param value
+     * @param value to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final Boolean value) {
@@ -21,7 +21,7 @@ public abstract class BooleanDV extends ComparableSingleFieldDV<Boolean> {
     }
 
     /**
-     * @param stringValue
+     * @param stringValue to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final String stringValue) {

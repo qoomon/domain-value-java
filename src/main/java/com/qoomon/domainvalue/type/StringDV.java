@@ -9,7 +9,7 @@ public abstract class StringDV extends ComparableSingleFieldDV<String> {
     }
 
     /**
-     * @param value
+     * @param value to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final String value) {
