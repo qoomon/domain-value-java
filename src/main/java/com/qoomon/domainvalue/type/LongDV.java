@@ -1,23 +1,9 @@
 package com.qoomon.domainvalue.type;
 
-import com.qoomon.domainvalue.ComparableSingleFieldDV;
-
-public abstract class LongDV extends ComparableSingleFieldDV<Long> {
+public abstract class LongDV extends ComparableDV<Long> {
 
     protected LongDV(final Long value) {
         super(value);
-    }
-
-    protected LongDV(final String stringValue) {
-        this(Long.valueOf(stringValue));
-    }
-
-    /**
-     * @param value to wrap
-     * @return true if valid, else false
-     */
-    public static boolean isValid(final Long value) {
-        return ComparableSingleFieldDV.isValid(value);
     }
 
     /**
@@ -26,15 +12,11 @@ public abstract class LongDV extends ComparableSingleFieldDV<Long> {
      */
     public static boolean isValid(final String stringValue) {
         try {
-            Long value = Long.valueOf(stringValue);
-            return isValid(value);
+            Long.valueOf(stringValue);
+            return true;
         } catch (Exception exception) {
             return false;
         }
     }
 
-    @Override
-    public Class<Long> type() {
-        return Long.class;
-    }
 }

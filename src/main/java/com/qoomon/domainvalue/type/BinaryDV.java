@@ -1,24 +1,9 @@
 package com.qoomon.domainvalue.type;
 
-import com.qoomon.domainvalue.SingleFieldDV;
-
-public abstract class BinaryDV extends SingleFieldDV<byte[]> {
+public abstract class BinaryDV extends DV<byte[]> {
 
     protected BinaryDV(final byte[] value) {
         super(value);
-    }
-
-    /**
-     * @param value to wrap
-     * @return true if valid, else false
-     */
-    public static boolean isValid(final byte[] value) {
-        return SingleFieldDV.isValid(value);
-    }
-
-    @Override
-    public Class<byte[]> type() {
-        return byte[].class;
     }
 
 }

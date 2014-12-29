@@ -1,8 +1,6 @@
 package com.qoomon.domainvalue.type;
 
-import com.qoomon.domainvalue.ComparableSingleFieldDV;
-
-public abstract class IntegerDV extends ComparableSingleFieldDV<Integer> {
+public abstract class IntegerDV extends ComparableDV<Integer> {
 
     protected IntegerDV(final Integer value) {
         super(value);
@@ -13,28 +11,16 @@ public abstract class IntegerDV extends ComparableSingleFieldDV<Integer> {
     }
 
     /**
-     * @param value to wrap
-     * @return true if valid, else false
-     */
-    public static boolean isValid(final Integer value) {
-        return ComparableSingleFieldDV.isValid(value);
-    }
-
-    /**
      * @param stringValue to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final String stringValue) {
         try {
-            Integer value = Integer.valueOf(stringValue);
-            return isValid(value);
+            Integer.valueOf(stringValue);
+            return true;
         } catch (Exception exception) {
             return false;
         }
     }
 
-    @Override
-    public Class<Integer> type() {
-        return Integer.class;
-    }
 }
