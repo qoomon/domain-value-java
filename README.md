@@ -1,7 +1,8 @@
 domain-value
 ============
 Example: BankAccountNumber
-`
+
+```java
 import com.qoomon.domainvalue.type.DV;
 import com.qoomon.domainvalue.type.LongDV;
 
@@ -25,4 +26,4 @@ public class BankAccount extends LongDV {
                 && value > 1000000;
     }
 }
-`
+```
