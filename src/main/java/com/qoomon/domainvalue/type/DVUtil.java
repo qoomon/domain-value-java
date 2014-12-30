@@ -16,17 +16,17 @@ public class DVUtil {
      * @return a new DV instance
      */
     public static <V, T extends DV<V>> Constructor<T> getConstructor(Class<V> valueType, Class<T> dvType) {
-        try {
-            Constructor<T> dvConstructor = (Constructor<T>) CONSTRUCTOR_CACHE.get(dvType);
-            if (dvConstructor == null) {
+        Constructor<T> dvConstructor = (Constructor<T>) CONSTRUCTOR_CACHE.get(dvType);
+        if (dvConstructor == null) {
+            try {
                 dvConstructor = dvType.getDeclaredConstructor(valueType);
-                dvConstructor.setAccessible(true);
-                CONSTRUCTOR_CACHE.put(dvType, dvConstructor);
+            } catch (Exception e) {
+                throw new RuntimeException("missing constructor " + dvType.getSimpleName() + "(" + valueType.getSimpleName() + ")", e);
             }
-            return dvConstructor;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            dvConstructor.setAccessible(true);
+            CONSTRUCTOR_CACHE.put(dvType, dvConstructor);
         }
+        return dvConstructor;
     }
 
     /**
