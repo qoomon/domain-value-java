@@ -1,6 +1,7 @@
 package com.qoomon.domainvalue.common;
 
 import com.qoomon.domainvalue.type.DV;
+import com.qoomon.domainvalue.type.DVUtil;
 import com.qoomon.domainvalue.type.LongDV;
 
 /**
@@ -13,11 +14,11 @@ public class Id extends LongDV {
     }
 
     public static boolean validate(Long value) {
-        return DV.validate(value, Long.class, Id.class);
+        return DVUtil.validate(value, Long.class, Id.class);
     }
 
     public static Id of(Long value) {
-        return DV.of(value, Long.class, Id.class);
+        return DVUtil.of(value, Long.class, Id.class);
     }
 
     @Override
