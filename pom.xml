@@ -5,7 +5,7 @@
 
     <groupId>com.qoomon</groupId>
     <artifactId>domainvalue</artifactId>
-    <version>DEVELOP-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <scm>
         <connection>scm:git:https://github.com/qoomon/domain-value.git</connection>
@@ -57,8 +57,8 @@
                         </goals>
                         <configuration>
                             <rules>
-                                <onlyWhenRelease>true</onlyWhenRelease>
                                 <requireReleaseDeps>
+                                    <onlyWhenRelease>true</onlyWhenRelease>
                                     <message>No Snapshots Allowed!</message>
                                 </requireReleaseDeps>
                             </rules>
