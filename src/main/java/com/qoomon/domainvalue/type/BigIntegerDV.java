@@ -9,10 +9,10 @@ public abstract class BigIntegerDV extends ComparableDV<BigInteger> {
     }
 
     /**
-     * @param stringValue to wrap
+     * @param stringValue to parse
      * @return true if valid, else false
      */
-    public static boolean isValid(final String stringValue) {
+    public static boolean BigInteger_isValid(final String stringValue) {
         try {
             new BigInteger(stringValue);
             return true;
@@ -21,4 +21,12 @@ public abstract class BigIntegerDV extends ComparableDV<BigInteger> {
         }
     }
 
+    /**
+     * @param stringValue to parse
+     * @return {@link BigInteger} object
+     */
+    public static BigInteger BigInteger_of(final String stringValue) {
+        assert isValid(stringValue) : isNotValidText(stringValue, BigInteger.class);
+        return new BigInteger(stringValue);
+    }
 }

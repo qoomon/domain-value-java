@@ -7,12 +7,21 @@ public abstract class CharacterDV extends ComparableDV<Character> {
     }
 
     /**
-     * @param stringValue to wrap
+     * @param stringValue to parse
      * @return true if valid, else false
      */
-    public static boolean isValid(final String stringValue) {
+    public static boolean Character_isValid(final String stringValue) {
         return stringValue != null
                 && stringValue.length() == 1;
+    }
+
+    /**
+     * @param stringValue to parse
+     * @return {@link Character} object
+     */
+    public static Character Character_of(final String stringValue) {
+        assert isValid(stringValue) : isNotValidText(stringValue, Character.class);
+        return stringValue.charAt(0);
     }
 
 }

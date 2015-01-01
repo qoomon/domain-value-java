@@ -1,9 +1,5 @@
 package com.qoomon.domainvalue.type;
 
-import java.lang.reflect.Constructor;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * A Domain Value is a single not null value wrapper
  *
@@ -23,10 +19,14 @@ public abstract class DV<T> {
 
     /**
      * @param value to wrap
-     * @return true if value is not null, false else
+     * @return true if valid, else false
      */
-    protected boolean isValid(T value) {
+    public static boolean isValid(Object value) {
         return value != null;
+    }
+
+    protected static String isNotValidText(Object value, Class<?> domainValueType) {
+        return value + " is not a valid value for " + domainValueType.getSimpleName();
     }
 
     /**

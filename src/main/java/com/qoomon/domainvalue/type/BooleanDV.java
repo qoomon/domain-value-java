@@ -6,11 +6,12 @@ public abstract class BooleanDV extends ComparableDV<Boolean> {
         super(value);
     }
 
+
     /**
-     * @param stringValue to wrap
+     * @param stringValue to parse
      * @return true if valid, else false
      */
-    public static boolean isValid(final String stringValue) {
+    public static boolean Boolean_isValid(final String stringValue) {
         try {
             Boolean.valueOf(stringValue);
             return true;
@@ -19,4 +20,12 @@ public abstract class BooleanDV extends ComparableDV<Boolean> {
         }
     }
 
+    /**
+     * @param stringValue to parse
+     * @return {@link Boolean} object
+     */
+    public static Boolean Boolean_of(final String stringValue) {
+        assert isValid(stringValue) : isNotValidText(stringValue, Boolean.class);
+        return Boolean.valueOf(stringValue);
+    }
 }

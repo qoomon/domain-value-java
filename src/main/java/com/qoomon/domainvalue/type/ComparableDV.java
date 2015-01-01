@@ -13,11 +13,6 @@ public abstract class ComparableDV<T extends Comparable<T>>
     }
 
     @Override
-    protected boolean isValid(T value) {
-        return super.isValid(value);
-    }
-
-    @Override
     public int compareTo(ComparableDV<T> obj) {
         return value().compareTo(obj.value());
     }

@@ -7,10 +7,10 @@ public abstract class ByteDV extends ComparableDV<Byte> {
     }
 
     /**
-     * @param stringValue to wrap
+     * @param stringValue to parse
      * @return true if valid, else false
      */
-    public static boolean isValid(final String stringValue) {
+    public static boolean Byte_isValid(final String stringValue) {
         try {
             Byte.valueOf(stringValue);
             return true;
@@ -19,4 +19,12 @@ public abstract class ByteDV extends ComparableDV<Byte> {
         }
     }
 
+    /**
+     * @param stringValue to parse
+     * @return {@link Byte} object
+     */
+    public static Byte Byte_of(final String stringValue) {
+        assert isValid(stringValue) : isNotValidText(stringValue, Byte.class);
+        return Byte.valueOf(stringValue);
+    }
 }
