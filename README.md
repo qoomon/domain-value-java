@@ -1,7 +1,6 @@
-domain-value
+Domain Values [![Build Status](https://travis-ci.org/qoomon/domain-value.svg?branch=master)](https://travis-ci.org/qoomon/domain-value)
 ============
-Maven Dependency
-
+**Maven Dependency**
 ```xml
 <dependency>
     <groupId>com.qoomon</groupId>
@@ -10,8 +9,7 @@ Maven Dependency
 </dependency>
 ```
 
-Example: BankAccountNumber
-
+**Example: BankAccountNumber**
 ```java
 public class BankAccountNumber extends LongDV {
 
