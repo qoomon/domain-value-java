@@ -9,8 +9,7 @@ Domain Values [![Build Status](https://travis-ci.org/qoomon/domain-value.svg?bra
 </dependency>
 ```
 
-Example: BankAccountNumber
-
+**Example: BankAccountNumber**
 ```java
 public class BankAccountNumber extends LongDV {
 
