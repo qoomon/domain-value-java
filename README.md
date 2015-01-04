@@ -44,3 +44,4 @@ public class BankAccountNumber extends LongDV {
 ```
 #### Hibernate User Types
 https://github.com/qoomon/hibernate-user-type
+ 
