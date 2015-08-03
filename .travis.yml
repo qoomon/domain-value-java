@@ -1,0 +1,6 @@
+language: java
+before_install:
+
+script: mvn -e verify
+jdk:
+  - openjdk6
