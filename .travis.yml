@@ -3,4 +3,4 @@ before_install:
 
 script: mvn -e verify
 jdk:
-  - openjdk7
+  - openjdk6
