@@ -12,17 +12,12 @@ public class Id extends LongDV {
         super(value);
     }
 
-    public static boolean validate(Long value) {
-        return DV.validate(value, Long.class, Id.class);
-    }
-
     public static Id of(Long value) {
-        return DV.of(value, Long.class, Id.class);
+        return new Id(value);
     }
 
-    @Override
-    protected boolean isValid(Long value) {
-        return super.isValid(value)
+    public static boolean isValid(Long value) {
+        return LongDV.isValid(value)
                 && value > 0;
     }
 

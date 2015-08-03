@@ -6,14 +6,21 @@ public abstract class ByteDV extends ComparableDV<Byte> {
         super(value);
     }
 
+    protected ByteDV(final String value) {
+        this(Byte.valueOf(value));
+    }
+
+    protected static boolean isValid(final Byte value) {
+        return ComparableDV.isValid(value);
+    }
+
     /**
      * @param stringValue to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final String stringValue) {
         try {
-            Byte.valueOf(stringValue);
-            return true;
+            return isValid(Byte.valueOf(stringValue));
         } catch (Exception exception) {
             return false;
         }

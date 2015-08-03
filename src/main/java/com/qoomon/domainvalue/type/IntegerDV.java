@@ -10,14 +10,17 @@ public abstract class IntegerDV extends ComparableDV<Integer> {
         this(Integer.valueOf(stringValue));
     }
 
+    protected static boolean isValid(final Integer value) {
+        return ComparableDV.isValid(value);
+    }
+
     /**
      * @param stringValue to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final String stringValue) {
         try {
-            Integer.valueOf(stringValue);
-            return true;
+            return isValid(Integer.valueOf(stringValue));
         } catch (Exception exception) {
             return false;
         }

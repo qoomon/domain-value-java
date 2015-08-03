@@ -1,6 +1,8 @@
 package com.qoomon.domainvalue.type;
 
-import java.lang.reflect.Constructor;
+import com.qoomon.domainvalue.exception.DVException;
+
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -12,21 +14,29 @@ import java.util.WeakHashMap;
  */
 public abstract class DV<T> {
 
+    private static Map<Class<? extends DV>, Method> isValidMethodCache = new WeakHashMap<>();
+
     /**
      * the wrapped value
      */
     private final T value;
 
     protected DV(final T value) {
+        assert validate(value) : value + " is NOT a valid value for " + this.getClass().getName();
         this.value = value;
     }
 
-    /**
-     * @param value to wrap
-     * @return true if value is not null, false else
-     */
-    protected boolean isValid(T value) {
-        return value != null;
+    private boolean validate(Object value) {
+        try {
+            Method isValidMethod = isValidMethodCache.get(this.getClass());
+            if(isValidMethod == null){
+                isValidMethod = this.getClass().getMethod("isValid", value.getClass());
+                isValidMethodCache.put(this.getClass(), isValidMethod);
+            }
+            return (boolean) isValidMethod.invoke(this.getClass(), value);
+        } catch (Exception e) {
+            throw new DVException(this.getClass().getSimpleName() + ".isValid(" + value.getClass().getSimpleName() + ") failed!", e);
+        }
     }
 
     /**
@@ -65,48 +75,13 @@ public abstract class DV<T> {
     }
 
 
-    private static Map<Class<? extends DV<?>>, Constructor<? extends DV<?>>> domainValueConstructorCache = new WeakHashMap<>();
-
 
     /**
-     * @param value  to wrap
-     * @param dvType domain value type
+     * @param value to wrap
      * @return true if value is not null, false else
      */
-    protected static <V, T extends DV<V>> boolean validate(V value, Class<V> valueType, Class<T> dvType) {
-        T dv = newInstance(value, valueType, dvType);
-        return dv.isValid(value);
+    protected static boolean isValid(Object value) {
+        return value != null;
     }
 
-    /**
-     * @param value  to wrap
-     * @param dvType domain value type
-     * @return a new specific DV instance
-     */
-    protected static <V, T extends DV<V>> T of(V value, Class<V> valueType, Class<T> dvType) {
-        assert validate(value, valueType, dvType) : value + " is not a valid value for " + dvType.getClass().getSimpleName();
-        return newInstance(value, valueType, dvType);
-    }
-
-    /**
-     * @param value     to wrap
-     * @param valueType value type
-     * @param dvType    domain value type
-     * @return a new specific DV instance
-     */
-
-    private static <V, T extends DV<V>> T newInstance(V value, Class<V> valueType, Class<T> dvType) {
-        try {
-            @SuppressWarnings("unchecked")
-            Constructor<T> dvConstructor = (Constructor<T>) domainValueConstructorCache.get(dvType);
-            if (dvConstructor == null) {
-                dvConstructor = dvType.getDeclaredConstructor(valueType);
-                dvConstructor.setAccessible(true);
-                domainValueConstructorCache.put(dvType, dvConstructor);
-            }
-            return dvConstructor.newInstance(value);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

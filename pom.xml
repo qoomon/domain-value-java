@@ -7,6 +7,15 @@
     <artifactId>domainvalue</artifactId>
     <version>DEVELOP-SNAPSHOT</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
     <scm>
         <connection>scm:git:https://github.com/qoomon/domain-value.git</connection>
     </scm>
@@ -27,6 +36,7 @@
     </distributionManagement>
 
     <build>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -52,5 +62,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

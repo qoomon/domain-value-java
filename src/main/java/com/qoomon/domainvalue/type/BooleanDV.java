@@ -6,14 +6,21 @@ public abstract class BooleanDV extends ComparableDV<Boolean> {
         super(value);
     }
 
+    protected BooleanDV(final String value) {
+        this(Boolean.valueOf(value));
+    }
+
+    protected static boolean isValid(final Boolean value) {
+        return ComparableDV.isValid(value);
+    }
+
     /**
      * @param stringValue to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final String stringValue) {
         try {
-            Boolean.valueOf(stringValue);
-            return true;
+            return isValid(Boolean.valueOf(stringValue));
         } catch (Exception exception) {
             return false;
         }

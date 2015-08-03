@@ -10,21 +10,21 @@ public abstract class FloatDV extends ComparableDV<Float> {
         this(Float.valueOf(stringValue));
     }
 
+    protected static boolean isValid(final Float value) {
+        return ComparableDV.isValid(value);
+    }
+
     /**
      * @param stringValue to wrap
      * @return true if valid, else false
      */
-    public static boolean isValid(final String stringValue) {
+    protected static boolean isValid(final String stringValue) {
         try {
-            Float.valueOf(stringValue);
-            return true;
+            return isValid(Float.valueOf(stringValue));
         } catch (Exception exception) {
             return false;
         }
     }
 
-    @Override
-    protected boolean isValid(Float value) {
-        return super.isValid(value);
-    }
+
 }
