@@ -15,15 +15,24 @@ public abstract class ShortDV extends ComparableDV<Short> {
     }
 
     /**
-     * @param stringValue to wrap
+     * @param stringValue to parse
      * @return true if valid, else false
      */
-    public static boolean isValid(final String stringValue) {
+    public static boolean Short_isValid(final String stringValue) {
         try {
             return isValid(Short.valueOf(stringValue));
         } catch (Exception exception) {
             return false;
         }
+    }
+
+    /**
+     * @param stringValue to parse
+     * @return {@link Short} object
+     */
+    public static Short Short_of(final String stringValue) {
+        assert isValid(stringValue) : isNotValidText(stringValue, Short.class);
+        return Short.valueOf(stringValue);
     }
 
 }

@@ -11,7 +11,6 @@ Maven Dependency
 Example: BankAccountNumber
 
 ```java
-import com.qoomon.domainvalue.type.DV;
 import com.qoomon.domainvalue.type.LongDV;
 
 public class BankAccount extends LongDV {
@@ -20,18 +19,13 @@ public class BankAccount extends LongDV {
         super(value);
     }
 
-    public static boolean validate(Long value) {
-        return DV.validate(value, Long.class, BankAccount.class);
-    }
-
     public static BankAccount of(Long value) {
-        return DV.of(value, Long.class, BankAccount.class);
+        return new BankAccount(value);
     }
 
-    @Override
-    protected boolean isValid(Long value) {
-        return super.isValid(value)
-                && value > 1000000;
+    public static boolean isValid(Long value) {
+        return LongDV.isValid(value)
+            && value > 1000000;
     }
 }
 ```

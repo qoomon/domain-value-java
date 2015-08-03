@@ -15,15 +15,24 @@ public abstract class LongDV extends ComparableDV<Long> {
     }
 
     /**
-     * @param stringValue to wrap
+     * @param stringValue to parse
      * @return true if valid, else false
      */
-    public static boolean isValid(final String stringValue) {
+    public static boolean Long_isValid(final String stringValue) {
         try {
             return isValid(Long.valueOf(stringValue));
         } catch (Exception exception) {
             return false;
         }
+    }
+
+    /**
+     * @param stringValue to parse
+     * @return {@link Long} object
+     */
+    public static Long Long_of(final String stringValue) {
+        assert isValid(stringValue) : isNotValidText(stringValue, Long.class);
+        return Long.valueOf(stringValue);
     }
 
 }
