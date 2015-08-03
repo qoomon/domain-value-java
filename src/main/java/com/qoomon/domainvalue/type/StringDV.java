@@ -6,4 +6,8 @@ public abstract class StringDV extends ComparableDV<String> {
         super(value);
     }
 
+    protected static boolean isValid(final String value) {
+        return ComparableDV.isValid(value);
+    }
+
 }

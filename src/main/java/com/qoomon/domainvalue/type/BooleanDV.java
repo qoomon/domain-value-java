@@ -6,26 +6,24 @@ public abstract class BooleanDV extends ComparableDV<Boolean> {
         super(value);
     }
 
+    protected BooleanDV(final String value) {
+        this(Boolean.valueOf(value));
+    }
+
+    protected static boolean isValid(final Boolean value) {
+        return ComparableDV.isValid(value);
+    }
 
     /**
-     * @param stringValue to parse
+     * @param stringValue to wrap
      * @return true if valid, else false
      */
-    public static boolean Boolean_isValid(final String stringValue) {
+    public static boolean isValid(final String stringValue) {
         try {
-            Boolean.valueOf(stringValue);
-            return true;
+            return isValid(Boolean.valueOf(stringValue));
         } catch (Exception exception) {
             return false;
         }
     }
 
-    /**
-     * @param stringValue to parse
-     * @return {@link Boolean} object
-     */
-    public static Boolean Boolean_of(final String stringValue) {
-        assert isValid(stringValue) : isNotValidText(stringValue, Boolean.class);
-        return Boolean.valueOf(stringValue);
-    }
 }

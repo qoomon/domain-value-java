@@ -1,6 +1,6 @@
-Domain Values [![Build Status](https://travis-ci.org/qoomon/domain-value.svg?branch=master)](https://travis-ci.org/qoomon/domain-value)
+domain-value [![Build Status](https://travis-ci.org/qoomon/domain-value.svg?branch=develop)](https://travis-ci.org/qoomon/domain-value)
 ============
-**Maven Dependency**
+Maven Dependency
 ```xml
 <dependency>
     <groupId>com.qoomon</groupId>
@@ -8,40 +8,24 @@ Domain Values [![Build Status](https://travis-ci.org/qoomon/domain-value.svg?bra
     <version>2.0.0</version>
 </dependency>
 ```
+Example: BankAccountNumber
 
-**Example: BankAccountNumber**
 ```java
-public class BankAccountNumber extends LongDV {
+import com.qoomon.domainvalue.type.LongDV;
 
-    protected BankAccountNumber(Long value) {
+public class BankAccount extends LongDV {
+
+    protected BankAccount(Long value) {
         super(value);
     }
 
-    public static BankAccountNumber of(Long value) {
-        assert isValid(value) : isNotValidText(value, Id.class);
-        return new Id(value);
+    public static BankAccount of(Long value) {
+        return new BankAccount(value);
     }
 
     public static boolean isValid(Long value) {
         return LongDV.isValid(value)
-                && value > 0;
+            && value > 1000000;
     }
-
-    public static BankAccountNumber of(String stringValue) {
-        Long value = Long_of(stringValue);
-        return of(value);
-    }
-
-    public static boolean isValid(String stringValue) {
-        if(Long_isValid(stringValue)){
-            Long value = Long_of(stringValue);
-            return isValid(value);
-        }
-        return false;
-    }
-
 }
 ```
-#### Hibernate User Types
-https://github.com/qoomon/hibernate-user-type
- 

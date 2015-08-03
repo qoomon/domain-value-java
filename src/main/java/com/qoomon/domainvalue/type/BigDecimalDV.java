@@ -8,14 +8,21 @@ public abstract class BigDecimalDV extends ComparableDV<BigDecimal> {
         super(value);
     }
 
+    protected BigDecimalDV(final String stringValue) {
+        this(new BigDecimal(stringValue));
+    }
+
+    protected static boolean isValid(final BigDecimal value) {
+        return ComparableDV.isValid(value);
+    }
+
     /**
      * @param stringValue to parse
      * @return true if valid, else false
      */
     public static boolean BigDecimal_isValid(final String stringValue) {
         try {
-            new BigDecimal(stringValue);
-            return true;
+            return isValid(new BigDecimal(stringValue));
         } catch (Exception exception) {
             return false;
         }

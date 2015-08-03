@@ -6,22 +6,21 @@ public abstract class CharacterDV extends ComparableDV<Character> {
         super(value);
     }
 
-    /**
-     * @param stringValue to parse
-     * @return true if valid, else false
-     */
-    public static boolean Character_isValid(final String stringValue) {
-        return stringValue != null
-                && stringValue.length() == 1;
+    protected CharacterDV(final String value) {
+        this(value.charAt(0));
+    }
+
+    protected static boolean isValid(final Character value) {
+        return DV.isValid(value);
     }
 
     /**
-     * @param stringValue to parse
-     * @return {@link Character} object
+     * @param stringValue to wrap
+     * @return true if valid, else false
      */
-    public static Character Character_of(final String stringValue) {
-        assert isValid(stringValue) : isNotValidText(stringValue, Character.class);
-        return stringValue.charAt(0);
+    protected static boolean isValid(final String stringValue) {
+        return stringValue != null && stringValue.length() == 1
+                && isValid(stringValue.charAt(0));
     }
 
 }

@@ -1,5 +1,11 @@
 package com.qoomon.domainvalue.type;
 
+import com.qoomon.domainvalue.exception.DVException;
+
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.WeakHashMap;
+
 /**
  * A Domain Value is a single not null value wrapper
  *
@@ -8,25 +14,29 @@ package com.qoomon.domainvalue.type;
  */
 public abstract class DV<T> {
 
+    private static Map<Class<? extends DV>, Method> isValidMethodCache = new WeakHashMap<>();
+
     /**
      * the wrapped value
      */
     private final T value;
 
     protected DV(final T value) {
+        assert validate(value) : value + " is NOT a valid value for " + this.getClass().getName();
         this.value = value;
     }
 
-    /**
-     * @param value to wrap
-     * @return true if valid, else false
-     */
-    public static boolean isValid(Object value) {
-        return value != null;
-    }
-
-    protected static String isNotValidText(Object value, Class<?> domainValueType) {
-        return value + " is not a valid value for " + domainValueType.getSimpleName();
+    private boolean validate(Object value) {
+        try {
+            Method isValidMethod = isValidMethodCache.get(this.getClass());
+            if(isValidMethod == null){
+                isValidMethod = this.getClass().getMethod("isValid", value.getClass());
+                isValidMethodCache.put(this.getClass(), isValidMethod);
+            }
+            return (boolean) isValidMethod.invoke(this.getClass(), value);
+        } catch (Exception e) {
+            throw new DVException(this.getClass().getSimpleName() + ".isValid(" + value.getClass().getSimpleName() + ") failed!", e);
+        }
     }
 
     /**
@@ -63,4 +73,15 @@ public abstract class DV<T> {
     public String toString() {
         return value().toString();
     }
+
+
+
+    /**
+     * @param value to wrap
+     * @return true if value is not null, false else
+     */
+    protected static boolean isValid(Object value) {
+        return value != null;
+    }
+
 }

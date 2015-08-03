@@ -6,26 +6,24 @@ public abstract class IntegerDV extends ComparableDV<Integer> {
         super(value);
     }
 
-    /**
-     * @param stringValue to parse
-     * @return true if valid, else false
-     */
-    public static boolean Integer_isValid(final String stringValue) {
-        try {
-            Integer.valueOf(stringValue);
-            return true;
-        } catch (Exception exception) {
-            return false;
-        }
+    protected IntegerDV(final String stringValue) {
+        this(Integer.valueOf(stringValue));
+    }
+
+    protected static boolean isValid(final Integer value) {
+        return ComparableDV.isValid(value);
     }
 
     /**
-     * @param stringValue to parse
-     * @return {@link java.lang.Integer} object
+     * @param stringValue to wrap
+     * @return true if valid, else false
      */
-    public static Integer Integer_of(final String stringValue) {
-        assert isValid(stringValue) : isNotValidText(stringValue, Integer.class);
-        return Integer.valueOf(stringValue);
+    public static boolean isValid(final String stringValue) {
+        try {
+            return isValid(Integer.valueOf(stringValue));
+        } catch (Exception exception) {
+            return false;
+        }
     }
 
 }

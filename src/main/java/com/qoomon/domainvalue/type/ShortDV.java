@@ -6,14 +6,21 @@ public abstract class ShortDV extends ComparableDV<Short> {
         super(value);
     }
 
+    protected ShortDV(final String value) {
+        this(Short.valueOf(value));
+    }
+
+    protected static boolean isValid(final Short value) {
+        return ComparableDV.isValid(value);
+    }
+
     /**
      * @param stringValue to parse
      * @return true if valid, else false
      */
     public static boolean Short_isValid(final String stringValue) {
         try {
-            Short.valueOf(stringValue);
-            return true;
+            return isValid(Short.valueOf(stringValue));
         } catch (Exception exception) {
             return false;
         }

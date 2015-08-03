@@ -6,14 +6,21 @@ public abstract class DoubleDV extends ComparableDV<Double> {
         super(value);
     }
 
+    protected DoubleDV(final String value) {
+        this(Double.valueOf(value));
+    }
+
+    protected static boolean isValid(final Double value) {
+        return ComparableDV.isValid(value);
+    }
+
     /**
      * @param stringValue to parse
      * @return true if valid, else false
      */
     public static boolean Double_isValid(final String stringValue) {
         try {
-            Double.valueOf(stringValue);
-            return true;
+            return isValid(Double.valueOf(stringValue));
         } catch (Exception exception) {
             return false;
         }
