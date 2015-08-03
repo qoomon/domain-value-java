@@ -16,16 +16,16 @@ import com.qoomon.domainvalue.type.LongDV;
 
 public class BankAccount extends LongDV {
 
-    protected Id(Long value) {
+    protected BankAccount(Long value) {
         super(value);
     }
 
     public static boolean validate(Long value) {
-        return DV.validate(value, Long.class, Id.class);
+        return DV.validate(value, Long.class, BankAccount.class);
     }
 
-    public static Id of(Long value) {
-        return DV.of(value, Long.class, Id.class);
+    public static BankAccount of(Long value) {
+        return DV.of(value, Long.class, BankAccount.class);
     }
 
     @Override
