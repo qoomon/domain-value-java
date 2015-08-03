@@ -20,20 +20,11 @@ public abstract class BigDecimalDV extends ComparableDV<BigDecimal> {
      * @param stringValue to parse
      * @return true if valid, else false
      */
-    public static boolean BigDecimal_isValid(final String stringValue) {
+    public static boolean isValid(final String stringValue) {
         try {
             return isValid(new BigDecimal(stringValue));
         } catch (Exception exception) {
             return false;
         }
-    }
-
-    /**
-     * @param stringValue to parse
-     * @return {@link BigDecimal} object
-     */
-    public static BigDecimal BigDecimal_of(final String stringValue) {
-        assert isValid(stringValue) : isNotValidText(stringValue, BigDecimal.class);
-        return new BigDecimal(stringValue);
     }
 }

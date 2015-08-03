@@ -18,21 +18,12 @@ public abstract class DoubleDV extends ComparableDV<Double> {
      * @param stringValue to parse
      * @return true if valid, else false
      */
-    public static boolean Double_isValid(final String stringValue) {
+    public static boolean isValid(final String stringValue) {
         try {
             return isValid(Double.valueOf(stringValue));
         } catch (Exception exception) {
             return false;
         }
-    }
-
-    /**
-     * @param stringValue to parse
-     * @return {@link Double} object
-     */
-    public static Double Double_of(final String stringValue) {
-        assert isValid(stringValue) : isNotValidText(stringValue, Double.class);
-        return Double.valueOf(stringValue);
     }
 
 }

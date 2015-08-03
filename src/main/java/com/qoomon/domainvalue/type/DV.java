@@ -14,7 +14,7 @@ import java.util.WeakHashMap;
  */
 public abstract class DV<T> {
 
-    private static Map<Class<? extends DV>, Method> isValidMethodCache = new WeakHashMap<>();
+    private static Map<Class<? extends DV>, Method> isValidMethodCache = new WeakHashMap<Class<? extends DV>,Method>();
 
     /**
      * the wrapped value
@@ -33,7 +33,7 @@ public abstract class DV<T> {
                 isValidMethod = this.getClass().getMethod("isValid", value.getClass());
                 isValidMethodCache.put(this.getClass(), isValidMethod);
             }
-            return (boolean) isValidMethod.invoke(this.getClass(), value);
+            return (Boolean) isValidMethod.invoke(this.getClass(), value);
         } catch (Exception e) {
             throw new DVException(this.getClass().getSimpleName() + ".isValid(" + value.getClass().getSimpleName() + ") failed!", e);
         }
