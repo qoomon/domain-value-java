@@ -1,4 +1,4 @@
-domain-value
+domain-value [![Build Status](https://travis-ci.org/qoomon/domain-value.svg?branch=develop)](https://travis-ci.org/qoomon/domain-value)
 ============
 Maven Dependency
 ```xml
