@@ -21,7 +21,7 @@ public abstract class DV<T> {
         assert validateOnConstruction = true;
     }
 
-    private static Map<Class<? extends DV>, Method> isValidMethodCache = new WeakHashMap<Class<? extends DV>, Method>();
+    private static Map<Class<? extends DV<?>>, Method> isValidMethodCache = new WeakHashMap<>();
 
     /**
      * the wrapped value
@@ -35,12 +35,13 @@ public abstract class DV<T> {
         this.value = value;
     }
 
+    @SuppressWarnings("unchecked")
     private boolean validate(Object value) {
         try {
             Method isValidMethod = isValidMethodCache.get(this.getClass());
             if (isValidMethod == null) {
                 isValidMethod = this.getClass().getMethod("isValid", value.getClass());
-                isValidMethodCache.put(this.getClass(), isValidMethod);
+                isValidMethodCache.put((Class<? extends DV<?>>) this.getClass(), isValidMethod);
             }
             return (Boolean) isValidMethod.invoke(this.getClass(), value);
         } catch (Exception e) {
