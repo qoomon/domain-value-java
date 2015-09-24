@@ -3,14 +3,13 @@ package com.qoomon.domainvalue.type;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.WeakHashMap;
 
 import com.qoomon.domainvalue.exception.DVException;
 import com.qoomon.domainvalue.exception.InvalidValueException;
 import com.qoomon.domainvalue.exception.MethodMissingException;
+import com.qoomon.generic.GenericTypeUtil;
 
 /**
  * A Domain Value is a single not null value wrapper
@@ -136,15 +135,7 @@ public abstract class DV<T> {
     public static <T extends DV<V>, V> Class<V> getValueType(Class<T> domainValueType) {
         Class<V> valueType = (Class<V>) valueTypeCache.get(domainValueType);
         if (valueType == null) {
-            while (valueType == null && domainValueType != null) {
-                Type superType = domainValueType.getGenericSuperclass();
-                if (superType instanceof ParameterizedType) {
-                    ParameterizedType genericType = (ParameterizedType) superType;
-                    valueType = (Class<V>) genericType.getActualTypeArguments()[0];
-                } else {
-                    domainValueType = (Class<T>) domainValueType.getSuperclass(); // domainValueType.getSuperclass();
-                }
-            }
+            valueType = (Class<V>) GenericTypeUtil.getTypeArguments(DV.class, domainValueType).get(0);
             valueTypeCache.put(domainValueType, valueType);
         }
         return valueType;
