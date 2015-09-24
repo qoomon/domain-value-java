@@ -1,13 +1,13 @@
-package com.qoomon.domainvalue.type;
+package com.qoomon.domainvalue.common;
 
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.qoomon.domainvalue.common.Id;
-import com.qoomon.domainvalue.exception.DVException;
+import com.qoomon.domainvalue.exception.InvalidValueException;
+import com.qoomon.domainvalue.type.DV;
 
 /**
  * Created by qoomon on 03/08/15.
@@ -19,7 +19,7 @@ public class IdTest {
         DV.validateOnConstruction(true);
     }
 
-    @Test(expected = DVException.class)
+    @Test(expected = InvalidValueException.class)
     public void of_invalid() throws Exception {
         // GIVEN
 
@@ -29,8 +29,8 @@ public class IdTest {
         // THEN
     }
 
-    @Test(expected = DVException.class)
-    public void of_invalid_dv() throws Exception {
+    @Test(expected = InvalidValueException.class)
+    public void of_invalid_null() throws Exception {
         // GIVEN
 
         // WHEN
@@ -47,6 +47,7 @@ public class IdTest {
         Id id = Id.of(123456789L);
 
         // THEN
-        assertThat(id.value(), is(123456789L));
+        assertThat(id.value(), equalTo(123456789L));
     }
+
 }

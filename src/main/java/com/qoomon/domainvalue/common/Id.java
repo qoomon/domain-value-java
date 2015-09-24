@@ -1,6 +1,5 @@
 package com.qoomon.domainvalue.common;
 
-import com.qoomon.domainvalue.type.DV;
 import com.qoomon.domainvalue.type.LongDV;
 
 /**
@@ -12,7 +11,7 @@ public class Id extends LongDV {
         super(value);
     }
 
-    public static Id of(Long value) {
+    static Id of(Long value) {
         return new Id(value);
     }
 
