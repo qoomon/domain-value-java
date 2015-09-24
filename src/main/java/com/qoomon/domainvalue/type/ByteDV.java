@@ -15,7 +15,8 @@ public abstract class ByteDV extends ComparableDV<Byte> {
     }
 
     /**
-     * @param stringValue to parse
+     * @param stringValue
+     *            to parse
      * @return true if valid, else false
      */
     public static boolean isValid(final String stringValue) {
@@ -25,6 +26,5 @@ public abstract class ByteDV extends ComparableDV<Byte> {
             return false;
         }
     }
-
 
 }

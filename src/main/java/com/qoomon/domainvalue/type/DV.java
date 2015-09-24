@@ -126,8 +126,7 @@ public abstract class DV<T> {
                 || !Modifier.isStatic(method.getModifiers())
                 || !method.getReturnType().equals(returnType)) {
             throw new MethodMissingException(domainValueType,
-                    "public static " + returnType.getSimpleName() + " "
-                            + domainValueMethodName + "(" + valueType.getSimpleName() + ")");
+                    "public static " + returnType.getSimpleName() + " " + domainValueMethodName + "(" + valueType.getSimpleName() + ")");
         }
 
         return method;
@@ -143,7 +142,7 @@ public abstract class DV<T> {
                     ParameterizedType genericType = (ParameterizedType) superType;
                     valueType = (Class<V>) genericType.getActualTypeArguments()[0];
                 } else {
-                    domainValueType = (Class<T>) domainValueType.getSuperclass();// domainValueType.getSuperclass();
+                    domainValueType = (Class<T>) domainValueType.getSuperclass(); // domainValueType.getSuperclass();
                 }
             }
             valueTypeCache.put(domainValueType, valueType);

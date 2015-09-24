@@ -15,7 +15,8 @@ public abstract class CharacterDV extends ComparableDV<Character> {
     }
 
     /**
-     * @param stringValue to wrap
+     * @param stringValue
+     *            to wrap
      * @return true if valid, else false
      */
     protected static boolean isValid(final String stringValue) {

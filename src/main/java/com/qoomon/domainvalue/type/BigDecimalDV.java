@@ -17,7 +17,8 @@ public abstract class BigDecimalDV extends ComparableDV<BigDecimal> {
     }
 
     /**
-     * @param stringValue to parse
+     * @param stringValue
+     *            to parse
      * @return true if valid, else false
      */
     public static boolean isValid(final String stringValue) {

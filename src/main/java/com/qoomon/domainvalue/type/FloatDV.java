@@ -15,7 +15,8 @@ public abstract class FloatDV extends ComparableDV<Float> {
     }
 
     /**
-     * @param stringValue to wrap
+     * @param stringValue
+     *            to wrap
      * @return true if valid, else false
      */
     protected static boolean isValid(final String stringValue) {
@@ -25,6 +26,5 @@ public abstract class FloatDV extends ComparableDV<Float> {
             return false;
         }
     }
-
 
 }

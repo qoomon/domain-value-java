@@ -1,7 +1,8 @@
 package com.qoomon.domainvalue.type;
 
 /**
- * @param <T> type of the wrapped value
+ * @param <T>
+ *            type of the wrapped value
  * @author Bengt Brodersen
  */
 public abstract class ComparableDV<T extends Comparable<T>>

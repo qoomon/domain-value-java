@@ -15,7 +15,8 @@ public abstract class ShortDV extends ComparableDV<Short> {
     }
 
     /**
-     * @param stringValue to parse
+     * @param stringValue
+     *            to parse
      * @return true if valid, else false
      */
     public static boolean isValid(final String stringValue) {

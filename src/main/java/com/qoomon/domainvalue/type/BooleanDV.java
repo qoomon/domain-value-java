@@ -15,7 +15,8 @@ public abstract class BooleanDV extends ComparableDV<Boolean> {
     }
 
     /**
-     * @param stringValue to wrap
+     * @param stringValue
+     *            to wrap
      * @return true if valid, else false
      */
     public static boolean isValid(final String stringValue) {
