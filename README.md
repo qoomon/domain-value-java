@@ -1,4 +1,4 @@
-domain-value [![Build Status](https://travis-ci.org/qoomon/domain-value.svg?branch=master)](https://travis-ci.org/qoomon/domain-value)
+domain-value [![Build Status](https://travis-ci.org/qoomon/domain-value.svg?branch=master)](https://travis-ci.org/qoomon/domain-value) [![Dependency Status](https://www.versioneye.com/user/projects/5605568af5f2eb001a000fd6/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5605568af5f2eb001a000fd6)
 ============
 Maven Dependency
 ```xml
