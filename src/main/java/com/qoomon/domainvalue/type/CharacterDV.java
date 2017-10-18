@@ -11,7 +11,7 @@ public abstract class CharacterDV extends ComparableDV<Character> {
     }
 
     protected static boolean isValid(final Character value) {
-        return DV.isValid(value);
+        return ComparableDV.isValid(value);
     }
 
     /**
