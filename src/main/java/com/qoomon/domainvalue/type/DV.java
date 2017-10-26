@@ -14,8 +14,7 @@ import com.qoomon.generic.GenericTypeUtil;
 /**
  * A Domain Value is a single not null value wrapper
  *
- * @param <T>
- *            type of the wrapped value
+ * @param <T> type of the wrapped value
  * @author Bengt Brodersen
  */
 public abstract class DV<T> {
@@ -23,20 +22,14 @@ public abstract class DV<T> {
     private static final String IS_VALID_METHOD_NAME = "isValid";
     private static final String OF_METHOD_NAME = "of";
 
-    private static boolean validateOnConstruction = false;
+    private static boolean validateOnConstruction = true;
 
-    @SuppressWarnings("rawtypes")
     private static Map<Class<? extends DV>, Method> isValidMethodCache = new WeakHashMap<>();
 
-    @SuppressWarnings("rawtypes")
     private static Map<Class<? extends DV>, Method> ofMethodCache = new WeakHashMap<>();
 
-    @SuppressWarnings("rawtypes")
     private static Map<Class<? extends DV>, Class<?>> valueTypeCache = new WeakHashMap<>();
 
-    static {
-        assert validateOnConstruction = true;
-    }
 
     /**
      * the wrapped value
@@ -44,15 +37,13 @@ public abstract class DV<T> {
     private final T value;
 
     /**
-     * 
-     * @param value
-     *            to wrap
+     * @param value to wrap
      * @require isValid() is true
      */
     @SuppressWarnings("unchecked")
     protected DV(final T value) {
         if (validateOnConstruction && !isValid(this.getClass(), value)) {
-            throw new InvalidValueException((Class<? extends DV<T>>) this.getClass(), value);
+            throw new InvalidValueException(this.getClass(), value);
         }
         this.value = value;
     }
@@ -99,6 +90,7 @@ public abstract class DV<T> {
         Method method = ofMethodCache.get(domainValueType);
         if (method == null) {
             method = method(domainValueType, OF_METHOD_NAME, domainValueType);
+            ofMethodCache.put(domainValueType, method);
         }
         return method;
     }
@@ -107,21 +99,23 @@ public abstract class DV<T> {
         Method method = isValidMethodCache.get(domainValueType);
         if (method == null) {
             method = method(domainValueType, IS_VALID_METHOD_NAME, boolean.class);
+            isValidMethodCache.put(domainValueType, method);
         }
         return method;
     }
 
     private static <T extends DV<V>, V> Method method(Class<T> domainValueType, String domainValueMethodName,
-            Class<?> returnType) {
+                                                      Class<?> returnType) {
         Class<V> valueType = getValueType(domainValueType);
-        Method method = null;
+        Method method;
         try {
             method = domainValueType.getMethod(domainValueMethodName, valueType);
         } catch (NoSuchMethodException | SecurityException e) {
+            throw new MethodMissingException(domainValueType,
+                    "public static " + returnType.getSimpleName() + " " + domainValueMethodName + "(" + valueType.getSimpleName() + ")");
         }
 
-        if (method == null
-                || !Modifier.isPublic(method.getModifiers())
+        if (!Modifier.isPublic(method.getModifiers())
                 || !Modifier.isStatic(method.getModifiers())
                 || !method.getReturnType().equals(returnType)) {
             throw new MethodMissingException(domainValueType,
@@ -142,8 +136,7 @@ public abstract class DV<T> {
     }
 
     /**
-     * @param value
-     *            to wrap
+     * @param value to wrap
      * @return true if value is not null, false else
      */
     protected static boolean isValid(Object value) {

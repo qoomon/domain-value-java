@@ -12,7 +12,7 @@ public class InvalidValueException extends DVException {
     private final Class<? extends DV<?>> domainValueType;
     private final Object invalidValue;
 
-    public <T> InvalidValueException(Class<? extends DV<T>> domainValueType, T invalidValue) {
+    public <T extends DV<V>, V> InvalidValueException(Class<T> domainValueType, V invalidValue) {
         super(invalidValue + " is NOT a valid value for " + domainValueType.getName());
         this.domainValueType = domainValueType;
         this.invalidValue = invalidValue;
