@@ -1,15 +1,16 @@
 package com.qoomon.domainvalue.type;
 
+import com.qoomon.domainvalue.annotation.FactoryMethod;
+import com.qoomon.domainvalue.annotation.ValidationMethod;
+import com.qoomon.domainvalue.exception.InvalidAnnotationException;
+import com.qoomon.generic.GenericTypeUtil;
+
+import java.lang.annotation.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.WeakHashMap;
-
-import com.qoomon.domainvalue.exception.DVException;
-import com.qoomon.domainvalue.exception.InvalidValueException;
-import com.qoomon.domainvalue.exception.MethodMissingException;
-import com.qoomon.generic.GenericTypeUtil;
 
 /**
  * A Domain Value is a single not null value wrapper
@@ -19,14 +20,11 @@ import com.qoomon.generic.GenericTypeUtil;
  */
 public abstract class DV<T> {
 
-    private static final String IS_VALID_METHOD_NAME = "isValid";
-    private static final String OF_METHOD_NAME = "of";
-
     private static boolean validateOnConstruction = true;
 
-    private static Map<Class<? extends DV>, Method> isValidMethodCache = new WeakHashMap<>();
+    private static Map<Class<? extends DV>, Method> validationMethodCache = new WeakHashMap<>();
 
-    private static Map<Class<? extends DV>, Method> ofMethodCache = new WeakHashMap<>();
+    private static Map<Class<? extends DV>, Method> factoryMethodCache = new WeakHashMap<>();
 
     private static Map<Class<? extends DV>, Class<?>> valueTypeCache = new WeakHashMap<>();
 
@@ -43,7 +41,7 @@ public abstract class DV<T> {
     @SuppressWarnings("unchecked")
     protected DV(final T value) {
         if (validateOnConstruction && !isValid(this.getClass(), value)) {
-            throw new InvalidValueException(this.getClass(), value);
+            throw new IllegalArgumentException(this.getClass() + " Invalid value: " + value);
         }
         this.value = value;
     }
@@ -52,21 +50,14 @@ public abstract class DV<T> {
         DV.validateOnConstruction = validateOnConstruction;
     }
 
-    public static <T extends DV<V>, V> void ensureInterface(Class<T> type) {
-        isValidMethod(type); // ensure isValid method is present
-        ofMethod(type); // ensure of method is present
-    }
 
     public static <T extends DV<V>, V> boolean isValid(Class<T> domainValueType, V value) {
         try {
-            return (boolean) isValidMethod(domainValueType).invoke(domainValueType, value);
-        } catch (InvocationTargetException e) {
-            Throwable targetException = e.getTargetException();
-            if (targetException instanceof DVException) {
-                throw (DVException) targetException;
+            return (boolean) validationMethod(domainValueType).invoke(domainValueType, value);
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            if (e.getCause() instanceof IllegalArgumentException) {
+                throw (IllegalArgumentException) e.getCause();
             }
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
@@ -74,54 +65,67 @@ public abstract class DV<T> {
     @SuppressWarnings("unchecked")
     public static <T extends DV<V>, V> T of(Class<T> domainValueType, V value) {
         try {
-            return (T) ofMethod(domainValueType).invoke(domainValueType, value);
-        } catch (InvocationTargetException e) {
-            Throwable targetException = e.getTargetException();
-            if (targetException instanceof DVException) {
-                throw (DVException) targetException;
+            return (T) factoryMethod(domainValueType).invoke(domainValueType, value);
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            if (e.getCause() instanceof IllegalArgumentException) {
+                throw (IllegalArgumentException) e.getCause();
             }
             throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
         }
     }
 
-    private static <T extends DV<V>, V> Method ofMethod(Class<T> domainValueType) {
-        Method method = ofMethodCache.get(domainValueType);
+    private static <T extends DV<V>, V> Method factoryMethod(Class<T> domainValueType) {
+        Method method = factoryMethodCache.get(domainValueType);
         if (method == null) {
-            method = method(domainValueType, OF_METHOD_NAME, domainValueType);
-            ofMethodCache.put(domainValueType, method);
+            method = annotationMethod(domainValueType, FactoryMethod.class);
+            Class<V> valueType = DV.getValueType(domainValueType);
+            if (method == null
+                    || !Modifier.isPublic(method.getModifiers())
+                    || !Modifier.isStatic(method.getModifiers())
+                    || !(method.getParameterTypes().length == 1)
+                    || !(method.getParameterTypes()[0] == valueType)
+                    || !method.getReturnType().equals(domainValueType)) {
+
+                throw new NoSuchMethodError(" Factory method is missing for " + domainValueType.getName() + "."
+                        + " e.g. @" + FactoryMethod.class.getName() + " public static " + domainValueType.getName() + " isValid(" + valueType.getName() + ")");
+            }
+            factoryMethodCache.put(domainValueType, method);
         }
         return method;
     }
 
-    private static <T extends DV<V>, V> Method isValidMethod(Class<T> domainValueType) {
-        Method method = isValidMethodCache.get(domainValueType);
+    private static <T extends DV<V>, V> Method validationMethod(Class<T> domainValueType) {
+
+        Method method = validationMethodCache.get(domainValueType);
         if (method == null) {
-            method = method(domainValueType, IS_VALID_METHOD_NAME, boolean.class);
-            isValidMethodCache.put(domainValueType, method);
+            method = annotationMethod(domainValueType, ValidationMethod.class);
+            Class<V> valueType = DV.getValueType(domainValueType);
+            if (method == null
+                    || !Modifier.isPublic(method.getModifiers())
+                    || !Modifier.isStatic(method.getModifiers())
+                    || !(method.getParameterTypes().length == 1)
+                    || !(method.getParameterTypes()[0] == valueType)
+                    || !method.getReturnType().equals(boolean.class)) {
+                throw new NoSuchMethodError(" Validation method is missing for " + domainValueType.getName() + "."
+                        + " e.g. @" + ValidationMethod.class.getName() + " public static " + boolean.class.getName() + " isValid(" + valueType.getName() + ")");
+            }
+            validationMethodCache.put(domainValueType, method);
         }
         return method;
     }
 
-    private static <T extends DV<V>, V> Method method(Class<T> domainValueType, String domainValueMethodName,
-                                                      Class<?> returnType) {
-        Class<V> valueType = getValueType(domainValueType);
-        Method method;
-        try {
-            method = domainValueType.getMethod(domainValueMethodName, valueType);
-        } catch (NoSuchMethodException | SecurityException e) {
-            throw new MethodMissingException(domainValueType,
-                    "public static " + returnType.getSimpleName() + " " + domainValueMethodName + "(" + valueType.getSimpleName() + ")");
-        }
 
-        if (!Modifier.isPublic(method.getModifiers())
-                || !Modifier.isStatic(method.getModifiers())
-                || !method.getReturnType().equals(returnType)) {
-            throw new MethodMissingException(domainValueType,
-                    "public static " + returnType.getSimpleName() + " " + domainValueMethodName + "(" + valueType.getSimpleName() + ")");
-        }
+    private static <T extends DV<V>, V> Method annotationMethod(final Class<T> valueClass, final Class<? extends Annotation> annotationClass) {
 
+        Method method = null;
+        for (Method valueClassMethod : valueClass.getMethods()) {
+            if (valueClassMethod.isAnnotationPresent(annotationClass)) {
+                if (method != null) {
+                    throw new InvalidAnnotationException(valueClass.getClass() + ": Ambiguous Method Annotation " + annotationClass.getSimpleName());
+                }
+                method = valueClassMethod;
+            }
+        }
         return method;
     }
 
@@ -177,5 +181,6 @@ public abstract class DV<T> {
     public String toString() {
         return value().toString();
     }
+
 
 }

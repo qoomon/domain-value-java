@@ -1,24 +1,23 @@
 package com.qoomon.domainvalue.type;
 
+import com.qoomon.domainvalue.annotation.FactoryMethod;
+import com.qoomon.domainvalue.annotation.ValidationMethod;
+import com.qoomon.domainvalue.exception.InvalidAnnotationException;
+import org.junit.Test;
+
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import com.qoomon.domainvalue.exception.InvalidValueException;
-import com.qoomon.domainvalue.exception.MethodMissingException;
 
 /**
  * Created by qoomon on 03/08/15.
  */
 public class DVTest {
 
-    @BeforeClass
-    public static void beforeClass() {
-        DV.validateOnConstruction(true);
+    public static <T extends DV<V>, V> void ensureInterface(Class<T> type, V value) {
+        DV.isValid(type, value); // ensure validation method is present
+        DV.of(type, value); // ensure of factory method is present
     }
 
     @Test
@@ -32,7 +31,7 @@ public class DVTest {
         assertThat(testLongDV, is(not(nullValue())));
     }
 
-    @Test(expected = InvalidValueException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void of_invalid() throws Exception {
         // GIVEN
 
@@ -69,58 +68,76 @@ public class DVTest {
         // GIVEN
 
         // WHEN
-        DV.ensureInterface(ValidLongDV.class);
+        ensureInterface(ValidLongDV.class, 1L);
 
         // THEN
     }
 
-    @Test(expected = MethodMissingException.class)
-    public void ensureInterface_invalidDV_ofMehtod_notPresent() throws Exception {
+    @Test(expected = NoSuchMethodError.class)
+    public void ensureInterface_invalidDV_ofMethod_notPresent() throws Exception {
         // GIVEN
 
         // WHEN
-        DV.ensureInterface(InvalidLongDV_ofMehtod_notPresent.class);
+        ensureInterface(InvalidLongDV_ofMethod_notPresent.class, 1L);
 
         // THEN
     }
 
-    @Test(expected = MethodMissingException.class)
-    public void ensureInterface_invalidDV_ofMehtod_wrongParameter() throws Exception {
+    @Test(expected = NoSuchMethodError.class)
+    public void ensureInterface_invalidDV_ofMethod_wrongParameter_factoryMethod() throws Exception {
         // GIVEN
 
         // WHEN
-        DV.ensureInterface(InvalidLongDV_ofMehtod_wrongParameter.class);
-
+        DV.of(InvalidLongDV_ofMethod_wrongParameter.class, 1L);
         // THEN
     }
 
-    @Test(expected = MethodMissingException.class)
-    public void ensureInterface_invalidDV_ofMehtod_notPublic() throws Exception {
+    @Test(expected = NoSuchMethodError.class)
+    public void ensureInterface_invalidDV_ofMethod_wrongParameter_validationMethod() throws Exception {
         // GIVEN
 
         // WHEN
-        DV.ensureInterface(InvalidLongDV_ofMehtod_notPublic.class);
-
+        DV.isValid(InvalidLongDV_ofMethod_wrongParameter.class, 1L);
         // THEN
     }
 
-    @Test(expected = MethodMissingException.class)
-    public void ensureInterface_invalidDV_ofMehtod_wrongReturnType() throws Exception {
+    @Test(expected = NoSuchMethodError.class)
+    public void ensureInterface_invalidDV_ofMethod_notPublic() throws Exception {
         // GIVEN
 
         // WHEN
-        new InvalidLongDV_ofMehtod_wrongReturnType(1L);
-        DV.ensureInterface(InvalidLongDV_ofMehtod_wrongReturnType.class);
+        ensureInterface(InvalidLongDV_ofMethod_notPublic.class, 1L);
 
         // THEN
     }
 
-    @Test(expected = MethodMissingException.class)
+    @Test(expected = NoSuchMethodError.class)
+    public void ensureInterface_invalidDV_ofMethod_wrongReturnType() throws Exception {
+        // GIVEN
+
+        // WHEN
+        new InvalidLongDV_ofMethod_wrongReturnType(1L);
+        ensureInterface(InvalidLongDV_ofMethod_wrongReturnType.class, 1L);
+
+        // THEN
+    }
+
+    @Test(expected = NoSuchMethodError.class)
     public void ensureInterface_invalidDV_isValidMethod_notPresent() throws Exception {
         // GIVEN
 
         // WHEN
-        DV.ensureInterface(InvalidLongDV_invalidDV_isValidMethod_notPresent.class);
+        ensureInterface(InvalidLongDV_isValidMethod_notPresent.class, 1L);
+
+        // THEN
+    }
+
+    @Test(expected = InvalidAnnotationException.class)
+    public void ensureInterface_invalidDV_isValidMethod_ambiguous() throws Exception {
+        // GIVEN
+
+        // WHEN
+        ensureInterface(InvalidLongDV_isValidMethod_ambiguous.class, 1L);
 
         // THEN
     }
@@ -131,93 +148,127 @@ public class DVTest {
             super(value);
         }
 
+        @FactoryMethod
         public static ValidLongDV of(Long value) {
             return new ValidLongDV(value);
         }
 
+        @ValidationMethod
         public static boolean isValid(Long value) {
             return LongDV.isValid(value);
         }
     }
 
-    public static class InvalidLongDV_ofMehtod_notPresent extends LongDV {
+    public static class InvalidLongDV_ofMethod_notPresent extends LongDV {
 
-        protected InvalidLongDV_ofMehtod_notPresent(Long value) {
+        protected InvalidLongDV_ofMethod_notPresent(Long value) {
             super(value);
         }
 
+        @ValidationMethod
         public static boolean isValid(Long value) {
             return LongDV.isValid(value);
         }
     }
 
-    public static class InvalidLongDV_ofMehtod_wrongParameter extends LongDV {
+    public static class InvalidLongDV_ofMethod_wrongParameter extends LongDV {
 
-        protected InvalidLongDV_ofMehtod_wrongParameter(Long value) {
+        protected InvalidLongDV_ofMethod_wrongParameter(Long value) {
             super(value);
         }
 
-        public static InvalidLongDV_ofMehtod_wrongParameter of(Integer value) {
-            return new InvalidLongDV_ofMehtod_wrongParameter(Long.valueOf(value));
+        @FactoryMethod
+        public static InvalidLongDV_ofMethod_wrongParameter of(Integer value) {
+            return new InvalidLongDV_ofMethod_wrongParameter(value.longValue());
         }
 
+        @ValidationMethod
+        public static boolean isValid(Integer value) {
+            return LongDV.isValid(value);
+        }
+    }
+
+    public static class InvalidLongDV_ofMethod_notPublic extends LongDV {
+
+        protected InvalidLongDV_ofMethod_notPublic(Long value) {
+            super(value);
+        }
+
+        @FactoryMethod
+        static InvalidLongDV_ofMethod_notPublic of(Long value) {
+            return new InvalidLongDV_ofMethod_notPublic(value);
+        }
+
+        @ValidationMethod
         public static boolean isValid(Long value) {
             return LongDV.isValid(value);
         }
     }
 
-    public static class InvalidLongDV_ofMehtod_notPublic extends LongDV {
+    public static class InvalidLongDV_ofMethod_wrongReturnType extends LongDV {
 
-        protected InvalidLongDV_ofMehtod_notPublic(Long value) {
+        protected InvalidLongDV_ofMethod_wrongReturnType(Long value) {
             super(value);
         }
 
-        static InvalidLongDV_ofMehtod_notPublic of(Long value) {
-            return new InvalidLongDV_ofMehtod_notPublic(value);
-        }
-
-        public static boolean isValid(Long value) {
-            return LongDV.isValid(value);
-        }
-    }
-
-    public static class InvalidLongDV_ofMehtod_wrongReturnType extends LongDV {
-
-        protected InvalidLongDV_ofMehtod_wrongReturnType(Long value) {
-            super(value);
-        }
-
+        @FactoryMethod
         public static Long of(Long value) {
             return value;
         }
 
+        @ValidationMethod
         public static boolean isValid(Long value) {
             return LongDV.isValid(value);
         }
     }
 
-    public static class InvalidLongDV_invalidDV_isValidMethod_notPresent extends LongDV {
+    public static class InvalidLongDV_isValidMethod_notPresent extends LongDV {
 
-        protected InvalidLongDV_invalidDV_isValidMethod_notPresent(Long value) {
+        protected InvalidLongDV_isValidMethod_notPresent(Long value) {
             super(value);
         }
 
-        public static InvalidLongDV_invalidDV_isValidMethod_notPresent of(Long value) {
-            return new InvalidLongDV_invalidDV_isValidMethod_notPresent(value);
+        @ValidationMethod
+        public static InvalidLongDV_isValidMethod_notPresent of(Long value) {
+            return new InvalidLongDV_isValidMethod_notPresent(value);
         }
     }
 
-    public static class InvalidLongDV_isValidMehtod_wrongParameter extends LongDV {
+    public static class InvalidLongDV_isValidMethod_wrongParameter extends LongDV {
 
-        protected InvalidLongDV_isValidMehtod_wrongParameter(Long value) {
+        protected InvalidLongDV_isValidMethod_wrongParameter(Long value) {
             super(value);
         }
 
-        public static InvalidLongDV_isValidMehtod_wrongParameter of(Long value) {
-            return new InvalidLongDV_isValidMehtod_wrongParameter(value);
+        @FactoryMethod
+        public static InvalidLongDV_isValidMethod_wrongParameter of(Long value) {
+            return new InvalidLongDV_isValidMethod_wrongParameter(value);
         }
 
+        @ValidationMethod
         public static boolean isValid(Long value) {
+            return LongDV.isValid(value);
+        }
+    }
+
+    public static class InvalidLongDV_isValidMethod_ambiguous extends LongDV {
+
+        protected InvalidLongDV_isValidMethod_ambiguous(Long value) {
+            super(value);
+        }
+
+        @FactoryMethod
+        public static InvalidLongDV_isValidMethod_wrongParameter of(Long value) {
+            return new InvalidLongDV_isValidMethod_wrongParameter(value);
+        }
+
+        @ValidationMethod
+        public static boolean isValid1(Long value) {
+            return LongDV.isValid(value);
+        }
+
+        @ValidationMethod
+        public static boolean isValid2(Long value) {
             return LongDV.isValid(value);
         }
     }
