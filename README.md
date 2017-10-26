@@ -6,7 +6,7 @@ Maven Dependency
 <dependency>
     <groupId>com.qoomon</groupId>
     <artifactId>domainvalue</artifactId>
-    <version>3.0.1</version>
+    <version>LATEST</version>
 </dependency>
 ```
 Example: BankAccountNumber
