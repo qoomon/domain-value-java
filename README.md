@@ -20,10 +20,15 @@ public class BankAccount extends LongDV {
         super(value);
     }
 
+    @FactoryMethod
     public static BankAccount of(Long value) {
         return new BankAccount(value);
     }
 
+    /**
+    * rember to call the super validation method first
+    */
+    @ValidationMethod
     public static boolean isValid(Long value) {
         return LongDV.isValid(value)
             && value > 1000000;
