@@ -1,5 +1,5 @@
 # domain-value #
-[![Build Status](https://travis-ci.org/qoomon/domain-value.svg?branch=master)](https://travis-ci.org/qoomon/domain-value) [![Dependency Status](https://www.versioneye.com/user/projects/5605568af5f2eb001a000fd6/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5605568af5f2eb001a000fd6) [![Maven Central](https://img.shields.io/maven-central/v/com.qoomon/domainvalue.svg)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.qoomon%22%20AND%20a%3A%22domainvalue%22)
+[![Build Status](https://travis-ci.org/qoomon/domain-value.svg?branch=master)](https://travis-ci.org/qoomon/domain-value) [![Maven Central](https://img.shields.io/maven-central/v/com.qoomon/domainvalue.svg)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.qoomon%22%20AND%20a%3A%22domainvalue%22)
 ============
 Maven Dependency
 ```xml
