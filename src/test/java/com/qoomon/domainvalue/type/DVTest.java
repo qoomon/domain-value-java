@@ -31,6 +31,17 @@ public class DVTest {
         assertThat(testLongDV, is(not(nullValue())));
     }
 
+    @Test
+    public void of_valid_withoutAnnotation() throws Exception {
+        // GIVEN
+
+        // WHEN
+        ValidLongDV_withoutAnnotations testLongDV = DV.of(ValidLongDV_withoutAnnotations.class, 1L);
+
+        // THEN
+        assertThat(testLongDV, is(not(nullValue())));
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void of_invalid() throws Exception {
         // GIVEN
@@ -47,6 +58,17 @@ public class DVTest {
 
         // WHEN
         boolean isValid = DV.isValid(ValidLongDV.class, 1L);
+
+        // THEN
+        assertThat(isValid, is(true));
+    }
+
+    @Test
+    public void isValid_valid_withoutAnnotation() throws Exception {
+        // GIVEN
+
+        // WHEN
+        boolean isValid = DV.isValid(ValidLongDV_withoutAnnotations.class, 1L);
 
         // THEN
         assertThat(isValid, is(true));
@@ -154,6 +176,21 @@ public class DVTest {
         }
 
         @ValidationMethod
+        public static boolean isValid(Long value) {
+            return LongDV.isValid(value);
+        }
+    }
+
+    public static class ValidLongDV_withoutAnnotations extends LongDV {
+
+        protected ValidLongDV_withoutAnnotations(Long value) {
+            super(value);
+        }
+
+        public static ValidLongDV_withoutAnnotations of(Long value) {
+            return new ValidLongDV_withoutAnnotations(value);
+        }
+
         public static boolean isValid(Long value) {
             return LongDV.isValid(value);
         }

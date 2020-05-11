@@ -5,7 +5,7 @@ import com.qoomon.domainvalue.annotation.ValidationMethod;
 import com.qoomon.domainvalue.exception.InvalidAnnotationException;
 import com.qoomon.generic.GenericTypeUtil;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -20,13 +20,16 @@ import java.util.WeakHashMap;
  */
 public abstract class DV<T> {
 
+    public static final String DEFAULT_VALIDATION_METHOD_NAME = "isValid";
+    public static final String DEFAULT_FACTORY_METHOD_NAME = "of";
+
     private static boolean validateOnConstruction = true;
 
-    private static Map<Class<? extends DV>, Method> validationMethodCache = new WeakHashMap<>();
+    private static final Map<Class<? extends DV<?>>, Method> validationMethodCache = new WeakHashMap<>();
 
-    private static Map<Class<? extends DV>, Method> factoryMethodCache = new WeakHashMap<>();
+    private static final Map<Class<? extends DV<?>>, Method> factoryMethodCache = new WeakHashMap<>();
 
-    private static Map<Class<? extends DV>, Class<?>> valueTypeCache = new WeakHashMap<>();
+    private static final Map<Class<? extends DV<?>>, Class<?>> valueTypeCache = new WeakHashMap<>();
 
 
     /**
@@ -77,17 +80,21 @@ public abstract class DV<T> {
     private static <T extends DV<V>, V> Method factoryMethod(Class<T> domainValueType) {
         Method method = factoryMethodCache.get(domainValueType);
         if (method == null) {
-            method = annotationMethod(domainValueType, FactoryMethod.class);
             Class<V> valueType = DV.getValueType(domainValueType);
+            method = annotationMethod(domainValueType, FactoryMethod.class);
+            if (method == null) {
+                method = namedMethod(domainValueType, DEFAULT_FACTORY_METHOD_NAME, valueType);
+            }
             if (method == null
                     || !Modifier.isPublic(method.getModifiers())
                     || !Modifier.isStatic(method.getModifiers())
                     || !(method.getParameterTypes().length == 1)
                     || !(method.getParameterTypes()[0] == valueType)
                     || !method.getReturnType().equals(domainValueType)) {
-
-                throw new NoSuchMethodError(" Factory method is missing for " + domainValueType.getName() + "."
-                        + " e.g. @" + FactoryMethod.class.getName() + " public static " + domainValueType.getName() + " isValid(" + valueType.getName() + ")");
+                throw new NoSuchMethodError(" Factory method is missing for " + domainValueType.getName() + "\n"
+                        + "  public static " + domainValueType.getName() + " isValid(" + valueType.getName() + ")\n"
+                        + "  or\n"
+                        + "  @" + FactoryMethod.class.getSimpleName() + " public static " + domainValueType.getName() + " isValid(" + valueType.getName() + ")");
             }
             factoryMethodCache.put(domainValueType, method);
         }
@@ -98,16 +105,21 @@ public abstract class DV<T> {
 
         Method method = validationMethodCache.get(domainValueType);
         if (method == null) {
-            method = annotationMethod(domainValueType, ValidationMethod.class);
             Class<V> valueType = DV.getValueType(domainValueType);
+            method = annotationMethod(domainValueType, ValidationMethod.class);
+            if (method == null) {
+                method = namedMethod(domainValueType, DEFAULT_VALIDATION_METHOD_NAME, valueType);
+            }
             if (method == null
                     || !Modifier.isPublic(method.getModifiers())
                     || !Modifier.isStatic(method.getModifiers())
                     || !(method.getParameterTypes().length == 1)
                     || !(method.getParameterTypes()[0] == valueType)
                     || !method.getReturnType().equals(boolean.class)) {
-                throw new NoSuchMethodError(" Validation method is missing for " + domainValueType.getName() + "."
-                        + " e.g. @" + ValidationMethod.class.getName() + " public static " + boolean.class.getName() + " isValid(" + valueType.getName() + ")");
+                throw new NoSuchMethodError(" Validation method is missing for " + domainValueType.getName() + "\n"
+                        + "  public static " + boolean.class.getName() + " isValid(" + valueType.getName() + ")\n"
+                        + "  or\n"
+                        + "  @" + ValidationMethod.class.getSimpleName() + " public static " + boolean.class.getName() + " isValid(" + valueType.getName() + ")");
             }
             validationMethodCache.put(domainValueType, method);
         }
@@ -121,9 +133,23 @@ public abstract class DV<T> {
         for (Method valueClassMethod : valueClass.getMethods()) {
             if (valueClassMethod.isAnnotationPresent(annotationClass)) {
                 if (method != null) {
-                    throw new InvalidAnnotationException(valueClass.getClass() + ": Ambiguous Method Annotation " + annotationClass.getSimpleName());
+                    throw new InvalidAnnotationException(valueClass + ": Ambiguous Method Annotation " + annotationClass.getSimpleName());
                 }
                 method = valueClassMethod;
+            }
+        }
+        return method;
+    }
+
+    private static <T extends DV<V>, V> Method namedMethod(final Class<T> valueClass, final String name, final Class<V> valueType) {
+
+        Method method = null;
+        for (Method valueClassMethod : valueClass.getMethods()) {
+            if (valueClassMethod.getName().equals(name)
+                    && valueClassMethod.getParameterTypes().length == 1
+                    && valueClassMethod.getParameterTypes()[0] == valueType) {
+                method = valueClassMethod;
+                break;
             }
         }
         return method;

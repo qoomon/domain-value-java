@@ -7,7 +7,7 @@
     <url>https://github.com/qoomon/domain-value</url>
     <groupId>com.qoomon</groupId>
     <artifactId>domainvalue</artifactId>
-    <version>5.0.0</version>
+    <version>5.1.0</version>
 
     <licenses>
         <license>
@@ -150,9 +150,6 @@
                 </plugins>
             </build>
             <distributionManagement>
-                <!--Deploy to Nexus Command-->
-                <!--export GPG_TTY=$(tty)-->
-                <!--mvn deploy -P release-->
                 <snapshotRepository>
                     <id>sonatype-nexus-snapshots</id>
                     <name>Sonatype Nexus Snapshots</name>
@@ -166,5 +163,7 @@
             </distributionManagement>
         </profile>
     </profiles>
-
 </project>
+
+<!--Deploy to Nexus Command-->
+<!--GPG_TTY=$(tty) mvn deploy -P release-->
